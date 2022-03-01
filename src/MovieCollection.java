@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
@@ -148,6 +149,7 @@ public class MovieCollection
       listToSort.set(possibleIndex, temp);
     }
   }
+
   
   private void displayMovieInfo(Movie movie)
   {
@@ -172,39 +174,52 @@ public class MovieCollection
       String[] castList = fullCast.split("\\|");
       for (String actor : castList)
       {
-        for (String actors : cast)
+        boolean check = true;
+        String current = actor;
+        for (String act : cast)
         {
-          if (actor.equals(actors) == false)
+          if (actor.equals(act) == true)
           {
-            cast.add(actor);
+            check = false;
           }
         }
-      }
-      // get search term
-      System.out.print("Enter a person to search for (first or last name): ");
-      String name = scanner.nextLine();
-      ArrayList<String> results = new ArrayList<>();
-      for (String actor : cast)
-      {
-        if (actor.indexOf(name) != -1)
+        if (check)
         {
-          results.add(actor);
+          cast.add(current);
         }
       }
-      //display results
-      for (int j = 0; j < results.size(); j++)
-      {
-        String actor = results.get(j);
-        int choiceNum = j + 1;
-        System.out.println("" + choiceNum + ". " + actor);
-      }
-
-      System.out.print("Which actor's movies do you want to explore?: ");
-      int choice = scanner.nextInt();
-      scanner.nextLine();
-
-
     }
+    /*
+    for (String a : cast)
+    {
+      System.out.print(a + ", ");
+    }
+    */
+    // get search term
+    System.out.print("Enter a person to search for (first or last name): ");
+    String name = scanner.nextLine();
+    name = name.toLowerCase();
+    ArrayList<String> results = new ArrayList<>();
+    for (String actor : cast)
+    {
+      String equal = actor.toLowerCase();
+      if (equal.indexOf(name) != -1)
+      {
+        results.add(actor);
+      }
+    }
+
+    //display results
+    for (int j = 0; j < results.size(); j++)
+    {
+      String actor = results.get(j);
+      int choiceNum = j + 1;
+      System.out.println("" + choiceNum + ". " + actor);
+    }
+
+    System.out.print("Which actor's movies do you want to explore?: ");
+    int choice = scanner.nextInt();
+    scanner.nextLine();
   }
 
   private void searchKeywords()
