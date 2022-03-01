@@ -150,6 +150,22 @@ public class MovieCollection
     }
   }
 
+  private void sortByRating(ArrayList<Movie> listToSort)
+  {
+    for (int j = 1; j < listToSort.size(); j++)
+    {
+      Movie temp = listToSort.get(j);
+      int rating = temp.getUserRating();
+
+      int possibleIndex = j;
+      while (possibleIndex > 0 && rating > listToSort.get(possibleIndex - 1).getUserRating())
+      {
+        listToSort.set(possibleIndex, listToSort.get(possibleIndex - 1));
+        possibleIndex--;
+      }
+      listToSort.set(possibleIndex, temp);
+    }
+  }
 
   
   private void displayMovieInfo(Movie movie)
