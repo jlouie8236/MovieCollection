@@ -150,6 +150,7 @@ public class MovieCollection
     }
   }
 
+
   
   private void displayMovieInfo(Movie movie)
   {
@@ -189,12 +190,6 @@ public class MovieCollection
         }
       }
     }
-    /*
-    for (String a : cast)
-    {
-      System.out.print(a + ", ");
-    }
-    */
     // get search term
     System.out.print("Enter a person to search for (first or last name): ");
     String name = scanner.nextLine();
@@ -208,7 +203,7 @@ public class MovieCollection
         results.add(actor);
       }
     }
-
+    sortString(results);
     //display results
     for (int j = 0; j < results.size(); j++)
     {
@@ -216,9 +211,31 @@ public class MovieCollection
       int choiceNum = j + 1;
       System.out.println("" + choiceNum + ". " + actor);
     }
-
-    System.out.print("Which actor's movies do you want to explore?: ");
+    System.out.print("Which actor's movies do you want to explore?\nEnter number: ");
     int choice = scanner.nextInt();
+    scanner.nextLine();
+    String actorChosen = results.get(choice - 1);
+    ArrayList<Movie> actorMovies = new ArrayList<Movie>();
+    for (Movie movie : movies)
+    {
+      if (movie.getCast().indexOf(actorChosen) != -1)
+      {
+        actorMovies.add(movie);
+      }
+    }
+    sortResults(actorMovies);
+    for (int j = 0; j < actorMovies.size(); j++)
+    {
+      String movieName = actorMovies.get(j).getTitle();
+      int choiceNum = j + 1;
+      System.out.println("" + choiceNum + ". " + movieName);
+    }
+    System.out.print("Which movie would you like to learn more about?\nEnter number: ");
+    int choice2 = scanner.nextInt();
+    scanner.nextLine();
+
+    displayMovieInfo(actorMovies.get(choice2 - 1));
+    System.out.println("\n ** Press Enter to Return to Main Menu **");
     scanner.nextLine();
   }
 
@@ -259,12 +276,67 @@ public class MovieCollection
   
   private void listGenres()
   {
-    /* TASK 5: IMPLEMENT ME! */
+    ArrayList<String> genres = new ArrayList<>();
+    for (Movie movie : movies)
+    {
+      String genre = movie.getGenres();
+      String[] genreList = genre.split("\\|");
+      for (String gen : genreList)
+      {
+        boolean check = true;
+        String current = gen;
+        for (String gen1 : genres)
+        {
+          if (gen.equals(gen1) == true)
+          {
+            check = false;
+          }
+        }
+        if (check)
+        {
+          genres.add(current);
+        }
+      }
+    }
+    sortString(genres);
+    for (int i = 0; i < genres.size(); i++)
+    {
+      String currentGenre = genres.get(i);
+      int choiceNum = i + 1;
+
+      System.out.println("" + choiceNum + ". " + currentGenre);
+    }
+    System.out.print("Which would you like to see all the movies for?\nEnter number: ");
+    int choice = scanner.nextInt();
+    scanner.nextLine();
+    String chosenGenre = genres.get(choice - 1);
+    ArrayList<Movie> selectMovies = new ArrayList<Movie>();
+    for (Movie movie : movies)
+    {
+      if (movie.getGenres().indexOf(chosenGenre) != -1)
+      {
+        selectMovies.add(movie);
+      }
+    }
+    sortResults(selectMovies);
+    for (int i = 0; i < selectMovies.size(); i++)
+    {
+      String currentTitle = selectMovies.get(i).getTitle();
+      int choiceNum = i + 1;
+
+      System.out.println("" + choiceNum + ". " + currentTitle);
+    }
+    System.out.print("Which movie would you like to learn more about?\nEnter number: ");
+    int choice1 = scanner.nextInt();
+    scanner.nextLine();
+    displayMovieInfo(selectMovies.get(choice1 - 1));
+    System.out.println("\n ** Press Enter to Return to Main Menu **");
+    scanner.nextLine();
   }
   
   private void listHighestRated()
   {
-    /* TASK 6: IMPLEMENT ME! */
+
   }
   
   private void listHighestRevenue()
@@ -310,5 +382,20 @@ public class MovieCollection
 
 
   // ADD ANY ADDITIONAL PRIVATE HELPER METHODS you deem necessary
+  private void sortString(ArrayList<String> listToSort)
+  {
+    for (int j = 1; j < listToSort.size(); j++)
+    {
+      String tempTitle = listToSort.get(j);
+
+      int possibleIndex = j;
+      while (possibleIndex > 0 && tempTitle.compareTo(listToSort.get(possibleIndex - 1)) < 0)
+      {
+        listToSort.set(possibleIndex, listToSort.get(possibleIndex - 1));
+        possibleIndex--;
+      }
+      listToSort.set(possibleIndex, tempTitle);
+    }
+  }
 
 }
